@@ -1,0 +1,18 @@
+version: "3.8"
+networks:
+  my-bridge:
+    external:
+      name: my-bridge
+services:
+  auto-deploy:
+    build: .
+    image: ixuewen/auto-deploy
+    container_name: auto-deploy-docker
+    restart: always
+    networks:
+      - my-bridge
+    volumes:
+      - /root/.ssh:/root/.ssh:ro
+      - /var/docker-volume/auto-deploy/log:/root/log
+      - /var/docker-volume/auto-deploy/data:/root/data:ro
+      - /var/docker-volume/nginx/www:/var/docker-volume/nginx/www
