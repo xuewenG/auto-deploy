@@ -8,15 +8,28 @@ import Config from './config'
 const app = express()
 app.use(express.json())
 
-const config: Config = yaml.safeLoad(
+const plainConfig: Config = yaml.safeLoad(
   fs.readFileSync('./data/config.yml', 'utf8')
 ) as Config
 
-app.post('/deploy/:name', (request, response) => {
-  const name = request.params.name
-  if (config.project.indexOf(name) > -1) {
-    const cmd = `bash ./data/shell/${name}.sh`
-    process.exec(cmd)
+const config: Config = new Config(plainConfig)
+
+app.all('/deploy/:name', (request, response) => {
+  const projectName = request.params.name
+  const project = config.findProject(projectName)
+  if (project !== null) {
+    const gitURL = project.gitURL
+    const cmd = `
+    set -x
+    mkdir -p log
+    log=./log/${projectName}-$(date "+%Y%m%d-%H%M%S").log
+    exec 1> $log
+    exec 2> $log
+    git clone ${gitURL} ./repo/${projectName}
+    cd ./repo/${projectName}
+    docker-compose down
+    docker-compose up -d --build`
+    process.exec(`${cmd}`)
     return response.json({ code: 2000 })
   }
   return response.json({ code: 4000 })
