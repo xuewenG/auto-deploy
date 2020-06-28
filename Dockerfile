@@ -8,20 +8,21 @@ WORKDIR $MY_HOME
 
 COPY package.json $MY_HOME
 RUN set -x \
-    && yarn
+    && yarn install
 
 COPY . $MY_HOME
 RUN set -x \
-    && yarn build
+    && yarn run build
 
 FROM node:12.17.0-stretch
+
 ENV MY_HOME=/root
 RUN mkdir -p $MY_HOME
 WORKDIR $MY_HOME
 
 COPY package.json $MY_HOME
 RUN set -x \
-    && yarn && echo $MY_HOME
+    && yarn install --production
 
 COPY --from=BUILDER /root/build .
 
