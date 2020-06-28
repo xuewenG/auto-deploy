@@ -9,8 +9,11 @@ export default function getCommand(
     log=./log/${projectName}-$(date "+%Y%m%d-%H%M%S").log
     exec 1> $log
     exec 2> $log
-    git clone ${gitURL} -b ${branch} ./repo/${projectName}
+    if [ ! -d "${projectName}" ]; then
+      git clone ${gitURL} -b ${branch} ./repo/${projectName}
+    fi
     cd ./repo/${projectName}
+    git pull
     docker-compose down
     docker-compose up -d --build`
 }
