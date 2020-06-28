@@ -1,9 +1,12 @@
 {
   "name": "auto-deploy",
   "version": "1.0.0",
-  "main": "index.js",
   "author": "xuewenG",
   "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc && node build"
+  },
   "dependencies": {
     "express": "^4.17.1",
     "js-yaml": "^3.14.0"
