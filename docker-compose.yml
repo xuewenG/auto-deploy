@@ -12,7 +12,10 @@ services:
     networks:
       - my-bridge
     volumes:
-      - /root/.ssh:/root/.ssh:ro
       - /var/docker-volume/auto-deploy/log:/root/log
-      - /var/docker-volume/auto-deploy/data:/root/data:ro
-      - /var/docker-volume/nginx/www:/var/docker-volume/nginx/www
+      - /var/docker-volume/auto-deploy/data:/root/data
+      - /var/docker-volume/auto-deploy/repo:/root/repo
+      - /root/.ssh:/root/.ssh:ro
+      - /etc/localtime:/etc/localtime:ro
+      - /usr/bin/docker-compose:/usr/bin/docker-compose:ro
+      - /var/run/docker.sock:/var/run/docker.sock
