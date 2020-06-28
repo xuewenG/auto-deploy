@@ -4,6 +4,7 @@ import process from 'child_process'
 import yaml from 'js-yaml'
 
 import Config from './config'
+import getCommand from './command'
 
 const app = express()
 app.use(express.json())
@@ -19,16 +20,8 @@ app.all('/deploy/:name', (request, response) => {
   const project = config.findProject(projectName)
   if (project !== null) {
     const gitURL = project.gitURL
-    const cmd = `
-    set -x
-    mkdir -p log
-    log=./log/${projectName}-$(date "+%Y%m%d-%H%M%S").log
-    exec 1> $log
-    exec 2> $log
-    git clone ${gitURL} ./repo/${projectName}
-    cd ./repo/${projectName}
-    docker-compose down
-    docker-compose up -d --build`
+    const branch = project.branch
+    const cmd = getCommand(projectName, gitURL, branch)
     process.exec(`${cmd}`)
     return response.json({ code: 2000 })
   }

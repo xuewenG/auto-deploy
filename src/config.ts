@@ -11,6 +11,7 @@ class Config {
         const project: Project = {
           projectName: plainProject.projectName,
           gitURL: plainProject.gitURL,
+          branch: plainProject.branch || 'master',
         }
         this.projects.push(project)
       }
