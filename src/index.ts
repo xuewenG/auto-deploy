@@ -15,7 +15,7 @@ const config: Config = yaml.safeLoad(
 app.post('/deploy/:name', (request, response) => {
   const name = request.params.name
   if (config.project.indexOf(name) > -1) {
-    const cmd = 'bash ./data/shell/' + name + '.sh'
+    const cmd = `bash ./data/shell/${name}.sh`
     process.exec(cmd)
     return response.json({ code: 2000 })
   }
@@ -23,6 +23,5 @@ app.post('/deploy/:name', (request, response) => {
 })
 
 const port = 80
-
 app.listen(port)
 console.log(`Server running at http://127.0.0.1:${port}`)
