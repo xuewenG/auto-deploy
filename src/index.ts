@@ -1,6 +1,6 @@
 import express from 'express'
 import fs from 'fs'
-import process from 'child_process'
+import child_process from 'child_process'
 import yaml from 'js-yaml'
 
 import Config from './config'
@@ -22,7 +22,8 @@ app.all('/deploy/:name', (request, response) => {
     const gitURL = project.gitURL
     const branch = project.branch
     const cmd = getCommand(projectName, gitURL, branch)
-    process.exec(`${cmd}`)
+    const projectEnv = Object.assign({}, project.projectEnv, process.env)
+    child_process.exec(`${cmd}`, { env: projectEnv })
     return response.json({ code: 2000 })
   }
   return response.json({ code: 4000 })

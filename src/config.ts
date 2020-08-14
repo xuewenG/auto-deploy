@@ -12,6 +12,7 @@ class Config {
           projectName: plainProject.projectName,
           gitURL: plainProject.gitURL,
           branch: plainProject.branch || 'master',
+          projectEnv: plainProject.projectEnv || {},
         }
         this.projects.push(project)
       }
