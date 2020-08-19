@@ -1,34 +1,23 @@
 import express from 'express'
-import fs from 'fs'
-import child_process from 'child_process'
-import yaml from 'js-yaml'
-
-import Config from './config'
-import getCommand from './command'
+import { serverConfig, mysqlConfig } from './config'
+import { cors } from '@ixuewen/express-util'
+import { initPool } from '@ixuewen/mysql-util'
+import { bindRouter } from './router'
+import { globalExceptionHandler } from './utils/exception'
 
 const app = express()
+
+// parse json body
 app.use(express.json())
+// allow cors
+cors(app, serverConfig.corsOrigin)
+// bind router
+bindRouter(app)
+// exception handler
+globalExceptionHandler(app)
+// init database pool
+initPool(mysqlConfig)
 
-const plainConfig: Config = yaml.safeLoad(
-  fs.readFileSync('./data/config.yml', 'utf8')
-) as Config
-
-const config: Config = new Config(plainConfig)
-
-app.all('/deploy/:name', (request, response) => {
-  const projectName = request.params.name
-  const project = config.findProject(projectName)
-  if (project !== null) {
-    const gitURL = project.gitURL
-    const branch = project.branch
-    const cmd = getCommand(projectName, gitURL, branch)
-    const projectEnv = Object.assign({}, project.projectEnv, process.env)
-    child_process.exec(`${cmd}`, { env: projectEnv })
-    return response.json({ code: 2000 })
-  }
-  return response.json({ code: 4000 })
-})
-
-const port = 80
+const port = serverConfig.port
 app.listen(port)
 console.log(`Server running at http://127.0.0.1:${port}`)
