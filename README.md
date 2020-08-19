@@ -4,6 +4,11 @@
 
 只需要在待部署的项目中编写相应的 Dockerfile 和 docker-compose.yml 配置文件，即可在每次推送代码时自动部署。
 
+支持以下特性：
+
+1. 区分 Git 分支
+2. 支持 Github Webhooks Secret 校验
+
 # 安装
 
 ## 安装 Docker 环境
@@ -30,9 +35,9 @@ docker run -d \
 -e MYSQL_HOST=localhost \
 -e MYSQL_USER=username \
 -e MYSQL_PASSWORD=password \
--v /etc/localtime:/etc/localtime:ro
--v /var/run/docker.sock:/var/run/docker.sock
---net host
+-v /etc/localtime:/etc/localtime:ro \
+-v /var/run/docker.sock:/var/run/docker.sock \
+--net host \
 --name auto-deploy-docker \
 ixuewen/auto-deploy
 ```
@@ -57,7 +62,7 @@ ixuewen/auto-deploy
 
 | projectName | gitUrl                               | branch | secret             | projectEnv   |
 | ----------- | ------------------------------------ | ------ | ------------------ | ------------ |
-| sync-play   | git@github.com:xuewenG/sync-play.git | master | YOUR_DEPLOY_SECRET | {Key: Value} |
+| sync-play   | git@github.com:xuewenG/sync-play.git | master | YOUR_DEPLOY_SECRET | { "k1": "v1", "k2": "v2"} |
 
 其中需要注意的是 `YOUR_DEPLOY_SECRET` 为随机字符串，可以随便填写，但是需要防止泄露。
 
