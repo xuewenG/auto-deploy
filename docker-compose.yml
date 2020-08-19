@@ -1,4 +1,4 @@
-version: "3.8"
+version: '3.8'
 networks:
   my-bridge:
     external:
@@ -12,10 +12,14 @@ services:
     networks:
       - my-bridge
     volumes:
-      - /var/docker-volume/auto-deploy/log:/root/log
-      - /var/docker-volume/auto-deploy/data:/root/data
-      - /var/docker-volume/auto-deploy/repo:/root/repo
       - /root/.ssh:/root/.ssh:ro
       - /etc/localtime:/etc/localtime:ro
-      - /usr/bin/docker-compose:/usr/bin/docker-compose:ro
       - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - PORT=${AUTO_DEPLOY_PORT}
+      - CONTEXT_PATH=${AUTO_DEPLOY_CONTEXT_PATH}
+      - CORS_ORIGIN=${AUTO_DEPLOY_CORS_ORIGIN}
+      - MYSQL_HOST=${AUTO_DEPLOY_MYSQL_HOST}
+      - MYSQL_USER=${AUTO_DEPLOY_MYSQL_USER}
+      - MYSQL_PASSWORD=${AUTO_DEPLOY_MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${AUTO_DEPLOY_MYSQL_DATABASE}
