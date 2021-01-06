@@ -9,6 +9,8 @@ const globalExceptionHandler = (app: express.Application): void => {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       next: express.NextFunction
     ) => {
+      console.error(err)
+      console.error(err.toString())
       response.json({ code: 5000 })
     }
   )
