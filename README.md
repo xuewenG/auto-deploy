@@ -72,6 +72,6 @@ ixuewen/auto-deploy
 
 1. Payload URL: http://${YOUR_DOMAIN}:${PORT}/${CONTEXT_PATH}/project/${PROJECT_NAME}/deploy
 2. Content type: application/json (必须)
-3. Secret: 数据库中填写的 secret
+3. Secret: 数据库中填写的 secret，即 `YOUR_DEPLOY_SECRET`
 
 其他保持默认。
