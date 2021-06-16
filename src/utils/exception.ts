@@ -1,4 +1,5 @@
 import express from 'express'
+import { BaseError } from '../error/BaseError'
 
 const globalExceptionHandler = (app: express.Application): void => {
   app.use(
@@ -10,8 +11,16 @@ const globalExceptionHandler = (app: express.Application): void => {
       next: express.NextFunction
     ) => {
       console.error(err)
-      console.error(err.toString())
-      response.json({ code: 5000 })
+      if (err instanceof BaseError) {
+        response.json({
+          code: err.code,
+          msg: err.msg
+        })
+      } else {
+        response.json({
+          code: 5000
+        })
+      }
     }
   )
 }
