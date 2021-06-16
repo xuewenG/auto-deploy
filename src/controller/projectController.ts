@@ -74,7 +74,7 @@ const getRequestParams = (
   const body: ProjectDeployReq = request.body
   const repository: Repository = body.repository
   const sshUrl: string = repository?.ssh_url
-  const branch: string = body.ref
+  const branch: string = body.ref?.slice(11)
   const commits: Commit[] = body.commits || []
   const commit: Commit = commits[0]
 
